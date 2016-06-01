@@ -1,13 +1,13 @@
-curl -s -XGET "http://localhost:9200/artists/_analyze?analyzer=tracks_name_analyzer&pretty" -d 'Memory Lane (Sittin in da Park)'
+curl -s -XGET "http://localhost:9200/tracks/_analyze?analyzer=track_name_analyzer&pretty" -d 'Memory Lane (Sittin in da Park)'
 
-curl -s -XGET "http://localhost:9200/artists/_search" -d'
+curl -s -XGET "http://localhost:9200/tracks/_search" -d'
 {
   "query": {
     "bool": {
       "must": [
         {
           "match": {
-            "tracks.name": "snoop"
+            "name": "snoop"
           }
         }
       ]

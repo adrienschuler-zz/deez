@@ -13,14 +13,14 @@
 
 ENDPOINT="https://api.deezer.com"
 DATE=`date +%Y%m%d%H%M%S`
-OUTPUT_FILE="tracks.$DATE.csv"
+OUTPUT_FILE="./datas/tracks.$DATE.csv"
 
 OFFSET=$1
 ARTISTS_LIMIT=$2
 TRACKS_LIMIT=$3
 
 : ${OFFSET:=1}
-: ${ARTISTS_LIMIT:=100}
+: ${ARTISTS_LIMIT:=1000}
 : ${TRACKS_LIMIT:=50}
 
 function get_top_tracks {

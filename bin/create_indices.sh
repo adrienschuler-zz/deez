@@ -3,11 +3,10 @@
 HOST='localhost:9200'
 DATE=`date +%Y%m%d%H%M%S`
 
-INDEX='artists'
-TYPE='artist'
+INDEX='tracks'
+TYPE='track'
 
-curl -s -XDELETE "$HOST/$INDEX"
-
+# curl -s -XDELETE "$HOST/$INDEX"
 # curl -s -XPUT "$HOST/$INDEX.$DATE" -d '
 curl -s -XPUT "$HOST/$INDEX" -d '
 {
@@ -19,7 +18,7 @@ curl -s -XPUT "$HOST/$INDEX" -d '
         },
         "analysis": {
             "analyzer": {
-                "tracks_name_analyzer": {
+                "track_name_analyzer": {
                     "type": "custom",
                     "tokenizer": "standard",
                     "filter": [
@@ -33,21 +32,20 @@ curl -s -XPUT "$HOST/$INDEX" -d '
     "mappings": {
         '"$TYPE"': {
             "properties": {
-                "artist_name": {
-                    "type": "string"
+                "name": {
+                    "type": "string",
+                    "analyzer": "track_name_analyzer"
                 },
-                "tracks": {
-                    "type": "object",
+                "score": {
+                    "type": "integer"
+                },
+                "artist": {
                     "properties": {
                         "id": {
                             "type": "integer"
                         },
                         "name": {
-                            "type": "string",
-                            "analyzer": "tracks_name_analyzer"
-                        },
-                        "popularity_score": {
-                            "type": "integer"
+                            "type": "string"
                         }
                     }
                 }
