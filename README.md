@@ -45,3 +45,164 @@ cat ./datas/tracks.* | python bin/tracks_indexer.py
 ```shell
 sort -rnk3 -t'|' datas/tracks.* | head -n 1000 | cut -f2 -d'|' | sort | uniq | python bin/warmup.py
 ```
+
+## Searching
+
+```shell
+curl -XPOST "http://localhost:9200/tracks/_search?pretty" -d'
+{
+  "size": 5,
+  "fields": [
+    "name",
+    "popularity",
+    "artist.id",
+    "artist.name"
+  ],
+  "query": {
+    "function_score": {
+      "query": {
+        "match": {
+          "name_autocomplete": "lucky"
+        }
+      },
+      "functions": [
+        {
+          "script_score": {
+            "script": "apv = input.get(doc[\"artist.id\"].value.toString()); return apv == null ? _score : _score * exp(apv)",
+            "params": {
+              "input": {
+                "27": 0.1,
+                "59": 0.7
+              }
+            }
+          }
+        },
+        {
+          "script_score": {
+            "script": "return _score * log(doc[\"popularity\"].value + 1)"
+          }
+        }
+      ],
+      "boost_mode": "replace"
+    }
+  }
+}'
+```
+
+```json
+{
+  "took": 2,
+  "timed_out": false,
+  "_shards": {
+    "total": 1,
+    "successful": 1,
+    "failed": 0
+  },
+  "hits": {
+    "total": 24,
+    "max_score": 1141.2983,
+    "hits": [
+      {
+        "_index": "tracks",
+        "_type": "track",
+        "_id": "18205206",
+        "_score": 1141.2983,
+        "fields": {
+          "name": [
+            "Lucky (In My Life)"
+          ],
+          "artist.name": [
+            "Eiffel 65"
+          ],
+          "popularity": [
+            290285
+          ],
+          "artist.id": [
+            59
+          ]
+        }
+      },
+      {
+        "_index": "tracks",
+        "_type": "track",
+        "_id": "66609426",
+        "_score": 1071.1042,
+        "fields": {
+          "name": [
+            "Get Lucky"
+          ],
+          "artist.name": [
+            "Daft Punk"
+          ],
+          "popularity": [
+            952131
+          ],
+          "artist.id": [
+            27
+          ]
+        }
+      },
+      {
+        "_index": "tracks",
+        "_type": "track",
+        "_id": "67238735",
+        "_score": 1066.7772,
+        "fields": {
+          "name": [
+            "Get Lucky"
+          ],
+          "artist.name": [
+            "Daft Punk"
+          ],
+          "popularity": [
+            900626
+          ],
+          "artist.id": [
+            27
+          ]
+        }
+      },
+      {
+        "_index": "tracks",
+        "_type": "track",
+        "_id": "115028110",
+        "_score": 407.04376,
+        "fields": {
+          "name": [
+            "Lucie"
+          ],
+          "artist.name": [
+            "Daniel Balavoine"
+          ],
+          "popularity": [
+            538072
+          ],
+          "artist.id": [
+            26
+          ]
+        }
+      },
+      {
+        "_index": "tracks",
+        "_type": "track",
+        "_id": "124389290",
+        "_score": 152.48505,
+        "fields": {
+          "name": [
+            "Lucifer's Angel"
+          ],
+          "artist.name": [
+            "The Rasmus"
+          ],
+          "popularity": [
+            313307
+          ],
+          "artist.id": [
+            84
+          ]
+        }
+      }
+    ]
+  }
+}
+```

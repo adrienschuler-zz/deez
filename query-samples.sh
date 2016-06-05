@@ -31,7 +31,7 @@ curl -XPOST "http://localhost:9200/tracks/_search?pretty" -d'
       "functions": [
         {
           "script_score": {
-            "script": "apv = input.get(doc[\"artist.id\"].value.toString()); return apv == null ? _score : _score * (apv + 1)",
+            "script": "apv = input.get(doc[\"artist.id\"].value.toString()); return apv == null ? _score : _score * exp(apv)",
             "params": {
               "input": {
                 "60": 0.98,
