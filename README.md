@@ -1,5 +1,3 @@
-# Search Engine position - preliminary test
-
 ## Requirements
 
 #### jq
@@ -44,6 +42,51 @@ cat ./datas/tracks.* | python bin/tracks_indexer.py
 #### Warmup index
 ```shell
 sort -rnk3 -t'|' datas/tracks.* | head -n 1000 | cut -f2 -d'|' | sort | uniq | python bin/warmup.py
+```
+
+## Tokens
+
+```shell
+curl -s -XGET "http://localhost:9200/tracks/_analyze?analyzer=autocomplete&pretty" -d 'Le Sud Le Fait Mieux - 2007 (feat. Billy Bats & Soprano) [DJ Djel remix]' | grep token
+  "tokens" : [ {
+    "token" : "le",
+    "token" : "su",
+    "token" : "sud",
+    "token" : "le",
+    "token" : "fa",
+    "token" : "fai",
+    "token" : "fait",
+    "token" : "mi",
+    "token" : "mie",
+    "token" : "mieu",
+    "token" : "mieux",
+    "token" : "20",
+    "token" : "200",
+    "token" : "2007",
+    "token" : "fe",
+    "token" : "fea",
+    "token" : "feat",
+    "token" : "bi",
+    "token" : "bil",
+    "token" : "bill",
+    "token" : "billy",
+    "token" : "ba",
+    "token" : "bat",
+    "token" : "bats",
+    "token" : "so",
+    "token" : "sop",
+    "token" : "sopr",
+    "token" : "sopra",
+    "token" : "sopran",
+    "token" : "soprano",
+    "token" : "dj",
+    "token" : "dj",
+    "token" : "dje",
+    "token" : "djel",
+    "token" : "re",
+    "token" : "rem",
+    "token" : "remi",
+    "token" : "remix",
 ```
 
 ## Searching
