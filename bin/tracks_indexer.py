@@ -12,7 +12,7 @@ import fileinput
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import streaming_bulk
 
-def loop_input():
+def index():
     for line in fileinput.input():
         line = line.strip(' \t\n\r')
         track_id, track_name, track_score, artist_name, artist_id = line.split('|')
@@ -21,10 +21,11 @@ def loop_input():
             "_index": "tracks",
             "_type": "track",
             "_op_type": "index",
-            "_id": int(track_id),
+            "_id": track_id,
             "_source": {
                 "name": track_name,
-                "score": int(track_score),
+                "name_autocomplete": track_name,
+                "popularity": int(track_score),
                 "artist": {
                     "id": int(artist_id),
                     "name": artist_name
@@ -33,5 +34,7 @@ def loop_input():
         }
 
 es = Elasticsearch()
-for ok, result in streaming_bulk(es, loop_input(), chunk_size=50):
+for ok, result in streaming_bulk(es, index(), chunk_size=50):
     print(result)
+
+es.indices.refresh(index="tracks")
