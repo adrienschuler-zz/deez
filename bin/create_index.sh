@@ -49,11 +49,13 @@ curl -s -XPUT "$HOST/$INDEX" -d '
             "properties": {
                 "name": {
                     "type": "string",
-                    "analyzer": "track_name"
+                    "analyzer": "track_name",
+                    "similarity": "BM25"
                 },
                 "name_autocomplete":{
                     "type": "string",
-                    "analyzer": "autocomplete"
+                    "analyzer": "autocomplete",
+                    "similarity": "BM25"
                 },
                 "popularity": {
                     "type": "integer"
