@@ -110,6 +110,7 @@ curl -XPOST "http://localhost:9200/tracks/_search?pretty" -d'
       },
       "functions": [
         {
+          # First, we boost tracks depending on the user artist profile vectors
           "script_score": {
             "script": "apv = input.get(doc[\"artist.id\"].value.toString()); return apv == null ? _score : _score * exp(apv)",
             "params": {
@@ -121,6 +122,7 @@ curl -XPOST "http://localhost:9200/tracks/_search?pretty" -d'
           }
         },
         {
+          # Then we boost tracks based on their popularity score
           "script_score": {
             "script": "return _score * log(doc[\"popularity\"].value + 1)"
           }
