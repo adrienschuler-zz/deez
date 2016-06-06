@@ -1,3 +1,16 @@
+* [Requirements](#requirements)
+    * [jq](#jq)
+    * [Python3](#python3)
+    * [Python Packages](#python-packages)
+    * [Fetch Some Deezer Tracks](#fetch-some-deezer-tracks)
+    * [Generate random users along with artists profile vectors](#generate-random-users-along-with-artists-profile-vectors)
+    * [Setup local elasticsearch indices](#setup-local-elasticsearch-indices)
+    * [Index tracks from our local dataset](#index-tracks-from-our-local-dataset)
+    * [Warmup index](#warmup-index)
+* [Tokens](#tokens)
+* [Searching](#searching)
+* [Bench](#bench)
+
 ## Requirements
 
 #### jq
